@@ -1,7 +1,7 @@
 <?php
 /*
-Plugin Name: Eventbrite Upcoming Events 
-Plugin URI:  http://www.github.com/kmckee/eventbrite_upcoming_events
+Plugin Name: Upcoming Events for EventBrite
+Plugin URI:  http://www.github.com/kmckee/upcoming_events_for_eventbrite_wordpress
 Description: This plugin adds a widget that displays a list of upcoming events from eventbrite.
 Version:     0.2 
 Author:      Kyle McKee 
