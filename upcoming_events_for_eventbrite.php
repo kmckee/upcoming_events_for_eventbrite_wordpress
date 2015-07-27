@@ -3,7 +3,7 @@
 Plugin Name: Upcoming Events for EventBrite
 Plugin URI:  http://www.github.com/kmckee/upcoming_events_for_eventbrite_wordpress
 Description: This plugin adds a widget that displays a list of upcoming events from eventbrite.
-Version:     0.2 
+Version:     0.3 
 Author:      Kyle McKee 
 Author URI:  http://aptobits.com
 License:     GPL2
@@ -12,17 +12,14 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 defined( 'ABSPATH' ) or die( 'Ah ah ah, you didn\'t say the magic word' );
 
-$app_key_id = 'uee_app_key';
-$organizer_id = 'uee_organizer_id';
+add_option('uee_app_key');
+add_option('uee_organizer_id');
 
-add_option($app_key_id);
-add_option($organizer_id);
-
-add_action( 'admin_menu', 'upcoming_events_plugin_menu' );
-function upcoming_events_plugin_menu() {
-    add_options_page( 'Upcoming Events Options', 'Upcoming Events for EventBrite', 'manage_options', 'upcoming_events_eventbrite', 'upcoming_events_options' );
+add_action( 'admin_menu', 'uee_upcoming_events_plugin_menu' );
+function uee_upcoming_events_plugin_menu() {
+    add_options_page( 'Upcoming Events Options', 'Upcoming Events for EventBrite', 'manage_options', 'upcoming_events_eventbrite', 'uee_upcoming_events_options' );
 }
-function upcoming_events_options() {
+function uee_upcoming_events_options() {
     if (!current_user_can('manage_options'))
     {
         wp_die( __('You do not have sufficient permissions to access this page.') );
@@ -36,8 +33,8 @@ function upcoming_events_options() {
     $organizer_val = get_option($organizer_id);
 
     if(isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
-        $app_key_val = $_POST[$app_key_id ];
-        $organizer_val = $_POST[ $organizer_id ];
+        $app_key_val = sanitize_text_field($_POST[$app_key_id]);
+        $organizer_val = sanitize_text_field($_POST[$organizer_id]);
         update_option( $app_key_id, $app_key_val );
         update_option( $organizer_id, $organizer_val );
         ?>
@@ -71,8 +68,8 @@ function upcoming_events_options() {
 
 }
 
-add_shortcode('upcoming_events_for_eventbrite', 'inject_upcoming_events');
-function inject_upcoming_events($atts) {
+add_shortcode('upcoming_events_for_eventbrite', 'uee_inject_upcoming_events');
+function uee_inject_upcoming_events($atts) {
     $a = shortcode_atts( array(
         'max_count' => '3'
     ), $atts );   
