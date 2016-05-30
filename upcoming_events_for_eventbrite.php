@@ -106,27 +106,27 @@ function uee_inject_upcoming_events($atts) {
       echo '<h3>Upcoming Events and Classes</h3>';
       if ($picture_val) echo '<table>'; // put it in a table if picture present
       foreach ($event_data->events as $event) {
-        $i += 1;
-        if ($i >$max_count) {
-            break;
-        };
         $ue_date = date_create_from_format('Y-m-d H:i:s',$event->event->start_date) ;  // event time
         if ( !$previous_val || ( $ue_date > $un_date ) ) { // if a future event or we don't care
-        if ($picture_val) echo '<tr><td>';
-        echo '<div class="uee_event">';
-        echo '<a href="'.$event->event->url.'"class="uee_event_title">'.$event->event->title.'</a> ';
-        $parsed_date = date_create_from_format('Y-m-d H:i:s', $event->event->start_date);
-        echo '<span class="uee_event_date">'.$parsed_date->format('l F j Y g:iA')."</span>";
-        echo '</div>';
-        echo '<div>';
-        echo $event->event->description;
-        echo '<a href="' . $event->event->url.'">'. 'Click here '.'</a> '. 'for more information' . '</div>';
-        if ($picture_val) { // insert picture if desicred
-           echo '</td><td>';
-           echo '<div> <img src="' . $event->event->logo . '">';
-           echo '</div></td></tr>';
+          $i += 1;
+          if ($i >$max_count) {
+              break;
+          };
+          if ($picture_val) echo '<tr><td>';
+          echo '<div class="uee_event">';
+          echo '<a href="'.$event->event->url.'"class="uee_event_title">'.$event->event->title.'</a> ';
+          $parsed_date = date_create_from_format('Y-m-d H:i:s', $event->event->start_date);
+          echo '<span class="uee_event_date">'.$parsed_date->format('l F j Y g:iA')."</span>";
+          echo '</div>';
+          echo '<div>';
+          echo $event->event->description;
+          echo '<a href="' . $event->event->url.'">'. 'Click here '.'</a> '. 'for more information' . '</div>';
+          if ($picture_val) { // insert picture if desicred
+            echo '</td><td>';
+            echo '<div> <img src="' . $event->event->logo . '">';
+            echo '</div></td></tr>';
+          }
         }
-      }
       }
       if ($picture_val) echo '</table>';
     }
