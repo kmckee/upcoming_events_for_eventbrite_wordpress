@@ -15,7 +15,6 @@ defined( 'ABSPATH' ) or die( 'Ah ah ah, you didn\'t say the magic word' );
 add_option('uee_app_key');
 add_option('uee_organizer_id');
 add_option('uee_previous_off');
-add_option('uee_table_format');
 add_option('uee_picture');
 
 add_action( 'admin_menu', 'uee_upcoming_events_plugin_menu' );
@@ -102,6 +101,7 @@ function uee_inject_upcoming_events($atts) {
     $event_data = json_decode($json);
     echo '<div class="uee_events" style="border:1px solid green;padding:10px;">';
     $i = 0;
+    $un_date = new DateTime() ; // now
     if ( array_key_exists('events', $event_data ) ) {
       echo '<h3>Upcoming Events and Classes</h3>';
       if ($picture_val) echo '<table>'; // put it in a table if picture present
@@ -110,10 +110,9 @@ function uee_inject_upcoming_events($atts) {
         if ($i >$max_count) {
             break;
         };
-        $ue_date = date_create_from_format('Y-m-d H:i:s',$event->event->start_date) ;
-        $un_date = date_create_from_format('U', time()) ;
-        if ( !$previous_val || ( date_format($ue_date, 'U') > date_format($un_date, 'U') ) ) { // if a new event or we don't care
-         if ($picture_val) echo '<tr><td>';
+        $ue_date = date_create_from_format('Y-m-d H:i:s',$event->event->start_date) ;  // event time
+        if ( !$previous_val || ( $ue_date > $un_date ) ) { // if a future event or we don't care
+        if ($picture_val) echo '<tr><td>';
         echo '<div class="uee_event">';
         echo '<a href="'.$event->event->url.'"class="uee_event_title">'.$event->event->title.'</a> ';
         $parsed_date = date_create_from_format('Y-m-d H:i:s', $event->event->start_date);
